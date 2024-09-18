@@ -93,6 +93,15 @@
     }
   });
 
-  // document.querySelector(".PageHeaderName").style.display = "none";
   document.querySelector(".PageNav").style.left = "222px";
+
+  // Update the src of the img element within the a.PageHeaderName element
+  const logo = document.querySelector('a.PageHeaderName[href="/"]');
+  logo.style.left = "15px";
+  if (logo) {
+    const imgElement = logo.querySelector("img");
+    if (imgElement) {
+      imgElement.src = "https://raw.githubusercontent.com/jessemillar/lalachievements-userscripts/main/logo.png";
+    }
+  }
 })();
