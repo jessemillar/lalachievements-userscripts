@@ -92,4 +92,7 @@
       element.innerText = "Account";
     }
   });
+
+  // document.querySelector(".PageHeaderName").style.display = "none";
+  document.querySelector(".PageNav").style.left = "222px";
 })();
