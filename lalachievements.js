@@ -17,6 +17,7 @@
 
     return string
       .split(/(\s+|\(|\)|\/|／|:)/) // Split by spaces, opening and closing parentheses, regular slashes, full-width slashes, and colons
+      .filter((word) => word !== "") // Remove empty strings from the array
       .map((word, index, arr) => {
         if (word === "(" || word === ")" || word === "/" || word === "／" || word === ":") {
           return word;
@@ -24,7 +25,7 @@
         if (romanNumerals.includes(word.toLowerCase())) {
           return word.toUpperCase();
         }
-        if (index === 0 || arr[index - 1] === "(" || arr[index - 1] === "/" || arr[index - 1] === "／" || arr[index - 1] === ":" || !exceptions.includes(word.toLowerCase())) {
+        if (index === 0 || arr[index - 1] === "(" || arr[index - 1] === "/" || arr[index - 1] === "／" || arr[index - 2] === ":" || !exceptions.includes(word.toLowerCase())) {
           return word.charAt(0).toUpperCase() + word.slice(1);
         } else {
           return word.toLowerCase();
