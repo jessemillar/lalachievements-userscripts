@@ -15,12 +15,12 @@
     const exceptions = ["a", "an", "and", "as", "at", "but", "by", "for", "if", "in", "nor", "of", "on", "or", "so", "the", "to", "up", "with", "yet", "from"];
 
     return string
-      .split(/(\s+|\(|\)|\/)/) // Split by spaces, opening and closing parentheses, and slashes
+      .split(/(\s+|\(|\)|\/|／)/) // Split by spaces, opening and closing parentheses, regular slashes, and full-width slashes
       .map((word, index, arr) => {
-        if (word === "(" || word === ")" || word === "/") {
+        if (word === "(" || word === ")" || word === "/" || word === "／") {
           return word;
         }
-        if (index === 0 || arr[index - 1] === "(" || arr[index - 1].trim() === "/" || !exceptions.includes(word.toLowerCase())) {
+        if (index === 0 || arr[index - 1] === "(" || arr[index - 1] === "/" || arr[index - 1] === "／" || !exceptions.includes(word.toLowerCase())) {
           return word.charAt(0).toUpperCase() + word.slice(1);
         } else {
           return word.toLowerCase();
