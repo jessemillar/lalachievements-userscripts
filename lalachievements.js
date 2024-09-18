@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         Capitalize Mount Names
+// @name         Lalachievements Tweaks
 // @namespace    https://jessemillar.com
 // @version      1.5
-// @description  Capitalize mount names in table cells and other elements
-// @match        https://lalachievements.com/char/*
+// @description  Capitalize names properly on Lalachievements, change account name to "Account" instead of first half of email, and update logo to something better
+// @match        https://lalachievements.com/*
 // @grant        none
 // ==/UserScript==
 
@@ -15,12 +15,13 @@
     const exceptions = ["a", "an", "and", "as", "at", "but", "by", "for", "if", "in", "nor", "of", "on", "or", "so", "the", "to", "up", "with", "yet", "from"];
 
     return string
-      .split(/(\s+|\(|\)|\/|／)/) // Split by spaces, opening and closing parentheses, regular slashes, and full-width slashes
+      .split(/(\s+|\(|\)|\/|／|:)/) // Split by spaces, opening and closing parentheses, regular slashes, full-width slashes, and colons
+      .filter((word) => word !== "")
       .map((word, index, arr) => {
-        if (word === "(" || word === ")" || word === "/" || word === "／") {
+        if (word === "(" || word === ")" || word === "/" || word === "／" || word === ":") {
           return word;
         }
-        if (index === 0 || arr[index - 1] === "(" || arr[index - 1] === "/" || arr[index - 1] === "／" || !exceptions.includes(word.toLowerCase())) {
+        if (index === 0 || arr[index - 1] === "(" || arr[index - 1] === "/" || arr[index - 1] === "／" || arr[index - 2] === ":" || !exceptions.includes(word.toLowerCase())) {
           return word.charAt(0).toUpperCase() + word.slice(1);
         } else {
           return word.toLowerCase();
@@ -78,4 +79,13 @@
   if (badGlobalErrorDiv && badGlobalErrorDiv.textContent.includes("ReferenceError: capitalizeWords is not defined")) {
     badGlobalErrorDiv.style.display = "none";
   }
+
+  // Change the inner text of elements with class PageNav-Text if preceded by a fontello-user icon to "Account"
+  const pageNavTextElements = document.querySelectorAll(".PageNav-Text");
+  pageNavTextElements.forEach((element) => {
+    const parent = element.parentElement;
+    if (parent && parent.querySelector("i.fontello-user")) {
+      element.innerText = "Account";
+    }
+  });
 })();
