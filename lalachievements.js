@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Capitalize Mount Names
 // @namespace    https://jessemillar.com
-// @version      1.4
+// @version      1.5
 // @description  Capitalize mount names in table cells and other elements
 // @match        https://lalachievements.com/char/*
 // @grant        none
@@ -27,16 +27,13 @@
     observer.disconnect();
 
     classNames.forEach((className) => {
-      console.log("Searching for class name: " + className);
       // Select all elements with the specified class name
       const elements = document.querySelectorAll(`.${className}`);
-      console.log("Found " + elements.length + " elements with class name: " + className);
 
       // Loop through each selected element
       elements.forEach((element) => {
         // Capitalize the inner text of the element
         const originalText = element.textContent;
-        console.log(originalText);
         const capitalizedText = capitalizeWords(originalText.toLowerCase());
         // Replace the original text with the capitalized text
         element.textContent = capitalizedText;
@@ -44,17 +41,13 @@
     });
 
     // Reconnect the observer after making changes
-    observer.observe(document.querySelector(".PageContent"), { childList: true, subtree: true });
+    observePageContent();
   }
 
-  window.addEventListener("load", capitalizeElements);
-
-  // Detect URL changes and run the function if the URL matches the pattern
-  window.addEventListener("popstate", function () {
-    if (window.location.href.match(/^https:\/\/lalachievements\.com\/char\//)) {
-      capitalizeElements();
-    }
-  });
+  // Function to observe the PageContent div
+  function observePageContent() {
+    observer.observe(document.querySelector(".PageContent"), { childList: true, subtree: true });
+  }
 
   // Mutation observer to watch for changes in the .PageContent element
   const observer = new MutationObserver(function (mutationsList, observer) {
@@ -65,5 +58,7 @@
       }
     }
   });
-  observer.observe(document.querySelector(".PageContent"), { childList: true, subtree: true });
+
+  // Start observing the PageContent div
+  observePageContent();
 })();
