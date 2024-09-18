@@ -10,16 +10,27 @@
 (function () {
   "use strict";
 
-  // Function to capitalize the first letter of each word in a string
-  function capitalizeWords(string) {
+  // Function to capitalize the first letter of each word in a string following title capitalization rules
+  function capitalizeTitle(string) {
+    const exceptions = ["a", "an", "and", "as", "at", "but", "by", "for", "if", "in", "nor", "of", "on", "or", "so", "the", "to", "up", "with", "yet", "from"];
+
     return string
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+      .split(/(\s+|\(|\)|\/)/) // Split by spaces, opening and closing parentheses, and slashes
+      .map((word, index, arr) => {
+        if (word === "(" || word === ")" || word === "/") {
+          return word;
+        }
+        if (index === 0 || arr[index - 1] === "(" || arr[index - 1].trim() === "/" || !exceptions.includes(word.toLowerCase())) {
+          return word.charAt(0).toUpperCase() + word.slice(1);
+        } else {
+          return word.toLowerCase();
+        }
+      })
+      .join("");
   }
 
   // Array of element class names to search and fix capitalization of
-  const classNames = ["MountRow-Name", "CharProfileBox-List-Name"];
+  const classNames = ["MountRow-Name", "CharProfileBox-List-Name", "TimelineRow-Text"];
 
   // Function to capitalize text content of elements with specified class names
   function capitalizeElements() {
@@ -34,7 +45,7 @@
       elements.forEach((element) => {
         // Capitalize the inner text of the element
         const originalText = element.textContent;
-        const capitalizedText = capitalizeWords(originalText.toLowerCase());
+        const capitalizedText = capitalizeTitle(originalText.toLowerCase());
         // Replace the original text with the capitalized text
         element.textContent = capitalizedText;
       });
@@ -61,4 +72,10 @@
 
   // Start observing the PageContent div
   observePageContent();
+
+  // Hide the badglobalerror div if it contains the phrase "ReferenceError: capitalizeWords is not defined"
+  const badGlobalErrorDiv = document.getElementById("badglobalerror");
+  if (badGlobalErrorDiv && badGlobalErrorDiv.textContent.includes("ReferenceError: capitalizeWords is not defined")) {
+    badGlobalErrorDiv.style.display = "none";
+  }
 })();
