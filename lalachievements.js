@@ -13,15 +13,18 @@
   // Function to capitalize the first letter of each word in a string following title capitalization rules
   function capitalizeTitle(string) {
     const exceptions = ["a", "an", "and", "as", "at", "but", "by", "for", "if", "in", "nor", "of", "on", "or", "so", "the", "to", "up", "with", "yet", "from"];
+    const romanNumerals = ["i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x", "xi", "xii", "xiii", "xiv", "xv", "xvi", "xvii", "xviii", "xix", "xx"];
 
     return string
       .split(/(\s+|\(|\)|\/|／|:)/) // Split by spaces, opening and closing parentheses, regular slashes, full-width slashes, and colons
-      .filter((word) => word !== "")
       .map((word, index, arr) => {
         if (word === "(" || word === ")" || word === "/" || word === "／" || word === ":") {
           return word;
         }
-        if (index === 0 || arr[index - 1] === "(" || arr[index - 1] === "/" || arr[index - 1] === "／" || arr[index - 2] === ":" || !exceptions.includes(word.toLowerCase())) {
+        if (romanNumerals.includes(word.toLowerCase())) {
+          return word.toUpperCase();
+        }
+        if (index === 0 || arr[index - 1] === "(" || arr[index - 1] === "/" || arr[index - 1] === "／" || arr[index - 1] === ":" || !exceptions.includes(word.toLowerCase())) {
           return word.charAt(0).toUpperCase() + word.slice(1);
         } else {
           return word.toLowerCase();
